@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link"; // 1. 先喺最頂 import 呢個組件
 
 export default function Hero() {
   return (
@@ -27,16 +28,21 @@ export default function Hero() {
         紀錄日常點滴，分享科技與生活嘅交集。
       </motion.p>
 
-      {/* 互動按鈕 */}
+      {/* 按鈕：由 button 改為 Link */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
         className="mt-10"
       >
-        <button className="rounded-full bg-white px-8 py-3 text-sm font-semibold text-black transition-transform hover:scale-105">
+        <Link 
+          href="https://www.google.com" 
+          target="_blank" // 呢句係等佢喺新分頁打開，唔會整走你個網
+          rel="noopener noreferrer" // 安全性設定，開外鏈必加
+          className="rounded-full bg-white px-8 py-3 text-sm font-semibold text-black transition-transform hover:scale-105 inline-block"
+        >
           閱讀最新文章
-        </button>
+        </Link>
       </motion.div>
     </section>
   );
