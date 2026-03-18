@@ -47,3 +47,18 @@ export default function Hero() {
     </section>
   );
 }
+
+import MathGame from "../components/MathGame";
+
+export default function Home() {
+  return (
+    <main className="min-h-screen bg-white p-6 md:p-12">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
+          小朋友數學挑戰
+        </h1>
+        <MathGame />
+      </div>
+    </main>
+  );
+}
