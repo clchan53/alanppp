@@ -37,7 +37,7 @@ export default function Hero() {
       >
         <Link 
           href="/game"
-          className="rounded-full bg-white px-8 py-3 text-sm font-semibold text-black transition-transform hover:scale-105 inline-block"
+          className="rounded-full bg-white px-12 py-5 text-2xl font-bold text-black transition-transform hover:scale-110 inline-block shadow-xl"
         >
           陳爾樂數學挑戰 🚀
         </Link>
