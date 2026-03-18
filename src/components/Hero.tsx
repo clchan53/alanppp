@@ -48,17 +48,17 @@ export default function Hero() {
   );
 }
 
-import MathGame from "../components/MathGame";
-
-export default function Home() {
-  return (
-    <main className="min-h-screen bg-white p-6 md:p-12">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
-          小朋友數學挑戰
-        </h1>
-        <MathGame />
-      </div>
-    </main>
-  );
-}
+{/* 按鈕：連去內部嘅遊戲頁面 */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        className="mt-10"
+      >
+        <Link 
+          href="/game" // 改成指向你啱啱整嘅 /game 路徑
+          className="rounded-full bg-white px-8 py-3 text-sm font-semibold text-black transition-transform hover:scale-105 inline-block"
+        >
+          開始數學挑戰 🚀
+        </Link>
+      </motion.div>}
