@@ -28,18 +28,25 @@ export default function Hero() {
         紀錄日常點滴，分享科技與生活嘅交集。
       </motion.p>
 
-      {/* 按鈕：連去內部嘅遊戲頁面 */}
+      {/* 兩粒大按鈕：數學 與 英文 */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="mt-10"
+        className="mt-10 flex flex-col sm:flex-row gap-6"
       >
         <Link 
           href="/game"
-          className="rounded-full bg-white px-12 py-5 text-2xl font-bold text-black transition-transform hover:scale-110 inline-block shadow-xl"
+          className="rounded-full bg-blue-500 px-10 py-4 text-2xl font-bold text-white transition-transform hover:scale-110 inline-block shadow-xl border-4 border-blue-400"
         >
-          陳爾樂數學挑戰 🚀
+          數學挑戰 🍄
+        </Link>
+
+        <Link 
+          href="/english"
+          className="rounded-full bg-orange-500 px-10 py-4 text-2xl font-bold text-white transition-transform hover:scale-110 inline-block shadow-xl border-4 border-orange-400"
+        >
+          英文挑戰 🔤
         </Link>
       </motion.div>
     </section>
