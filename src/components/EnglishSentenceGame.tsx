@@ -3,32 +3,31 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// 11 句中文句子庫
+// 10 句英文句子庫
 const SENTENCE_LIST = [
-  { text: "小種子發芽了。", chunks: ["小種子", "發芽了", "。"] },
-  { text: "我在温室種植番茄。", chunks: ["我", "在", "温室", "種植", "番茄", "。"] },
-  { text: "姐姐細心地除細草。", chunks: ["姐姐", "細心地", "除細草", "。"] },
-  { text: "番茄在田裏生長。", chunks: ["番茄", "在", "田裏", "生長", "。"] },
-  { text: "媽媽到公園做運動。", chunks: ["媽媽", "到", "公園", "做運動", "。"] },
-  { text: "信用卡付款真方便。", chunks: ["信用卡", "付款", "真方便", "。"] },
-  { text: "八達通付款真方便。", chunks: ["八達通", "付款", "真方便", "。"] },
-  { text: "農夫在田裏工作。", chunks: ["農夫", "在", "田裏", "工作", "。"] },
-  { text: "同學們在操場上跑步。", chunks: ["同學們", "在", "操場上", "跑步", "。"] },
-  { text: "暑假後，我升讀小學。", chunks: ["暑假後", "，", "我", "升讀", "小學", "。"] },
-  { text: "媽媽到市場買生菜。", chunks: ["媽媽", "到", "市場", "買生菜", "。"] }
+  { text: "I like bread for breakfast.", chunks: ["I", "like", "bread", "for", "breakfast."] },
+  { text: "I like noodles for lunch.", chunks: ["I", "like", "noodles", "for", "lunch."] },
+  { text: "I like rice for dinner.", chunks: ["I", "like", "rice", "for", "dinner."] },
+  { text: "I can take photos.", chunks: ["I", "can", "take", "photos."] },
+  { text: "I can ride a horse.", chunks: ["I", "can", "ride", "a", "horse."] },
+  { text: "I can play hockey.", chunks: ["I", "can", "play", "hockey."] },
+  { text: "Do you like painting?", chunks: ["Do", "you", "like", "painting?"] },
+  { text: "Do you like flying a kite?", chunks: ["Do", "you", "like", "flying", "a", "kite?"] },
+  { text: "Do you like dancing?", chunks: ["Do", "you", "like", "dancing?"] },
+  { text: "He likes playing basketball.", chunks: ["He", "likes", "playing", "basketball."] }
 ];
 
 const PRAISES = [
-  "你好叻呀！全部句子都識排喇！",
-  "直係超級小博士！好聰明呀！",
-  "爸爸為你感到驕傲！太棒了！",
-  "你已經學識晒所有句子喇！加油！",
-  "好厲害！你係重組句子小戰士！"
+  "You did it! You are an English Superstar! ⭐",
+  "Fantastic! You parsed all sentences perfectly! 🎉",
+  "Awesome job! I'm so proud of you! ❤️",
+  "Brilliant! You are a master of English sentences! 🚀",
+  "Amazing! Your English is super good! 🌟"
 ];
 
 type WordBlock = { id: string; text: string };
 
-export default function SentenceGame() {
+export default function EnglishSentenceGame() {
   const [shuffledDeck, setShuffledDeck] = useState<typeof SENTENCE_LIST>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   
@@ -46,11 +45,11 @@ export default function SentenceGame() {
     } catch (error) {}
   };
 
-  const speakCantonese = (text: string) => {
+  const speakEnglish = (text: string) => {
     if ("speechSynthesis" in window) {
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "zh-HK"; 
-      utterance.rate = 0.85;    
+      utterance.lang = "en-US"; 
+      utterance.rate = 0.8; 
       window.speechSynthesis.speak(utterance);
     }
   };
@@ -68,15 +67,15 @@ export default function SentenceGame() {
     initGame();
   }, []);
 
-  // 載入新題目 (核心修復點：將 currentIndex 加入 ID 防止衝突)
+  // 載入新題目 (修復了 ID 衝突問題)
   useEffect(() => {
     if (shuffledDeck.length > 0 && !isFinished) {
       const currentSentence = shuffledDeck[currentIndex];
       
-      // 👇 透過 q${currentIndex} 確保每條題目嘅字塊 ID 絕對獨立
+      // 👇 核心修復：將 currentIndex 加入 ID，確保每一題嘅字塊 ID 都係獨一無二
       const initialPool = currentSentence.chunks
-        .map((text, i) => ({ id: `q${currentIndex}-zh-word-${i}`, text }))
-        .sort(() => Math.random() - 0.5);
+        .map((text, i) => ({ id: `q${currentIndex}-word-${i}`, text }))
+        .sort(() => Math.random() - 0.5); 
       
       setPool(initialPool);
       setSelected([]);
@@ -90,24 +89,24 @@ export default function SentenceGame() {
     const currentSentence = shuffledDeck[currentIndex];
     
     if (selected.length === currentSentence.chunks.length) {
-      const formedSentence = selected.map((w) => w.text).join("");
+      const formedSentence = selected.map((w) => w.text).join(" ");
       
       if (formedSentence === currentSentence.text) {
         playSound("coin");
         setFeedback("correct");
         setScore((s) => s + 1);
-        speakCantonese(currentSentence.text);
+        speakEnglish(currentSentence.text);
 
         setTimeout(() => {
           if (currentIndex + 1 >= shuffledDeck.length) {
             const randomPraise = PRAISES[Math.floor(Math.random() * PRAISES.length)];
             setPraiseText(randomPraise);
             setIsFinished(true);
-            speakCantonese(randomPraise);
+            setTimeout(() => speakEnglish(randomPraise), 500); 
           } else {
             setCurrentIndex((prev) => prev + 1);
           }
-        }, 1500);
+        }, 1800);
 
       } else {
         playSound("bump");
@@ -118,7 +117,7 @@ export default function SentenceGame() {
           setFeedback("idle");
           setPool((prev) => [...prev, ...selected].sort(() => Math.random() - 0.5));
           setSelected([]);
-        }, 800);
+        }, 1000);
       }
     }
   }, [selected, currentIndex, shuffledDeck, isFinished]);
@@ -139,51 +138,50 @@ export default function SentenceGame() {
   const targetLength = shuffledDeck[currentIndex]?.chunks.length || 0;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[85vh] bg-[#F3E8FF] rounded-3xl p-6 shadow-inner relative overflow-hidden select-none">
+    <div className="flex flex-col items-center justify-center min-h-[85vh] bg-[#EEF2FF] rounded-3xl p-6 shadow-inner relative overflow-hidden select-none">
       
-      {/* 計分錶 */}
-      <div className="absolute top-6 right-6 flex items-center gap-3 bg-white/90 p-3 px-5 rounded-full border-4 border-purple-400 z-10 shadow-md">
+      <div className="absolute top-6 right-6 flex items-center gap-3 bg-white/90 p-3 px-5 rounded-full border-4 border-indigo-400 z-10 shadow-md">
         <span className="text-4xl">🌟</span>
-        <span className="text-4xl font-extrabold text-purple-700 font-mono tracking-tighter">
+        <span className="text-4xl font-extrabold text-indigo-700 font-mono tracking-tighter">
           {score.toString().padStart(2, "0")}
         </span>
       </div>
 
-      <div className="text-center mb-8 z-10 max-w-3xl w-full">
-        <h2 className="text-3xl font-black text-purple-700 mb-2 tracking-wider">句子魔法師</h2>
+      <div className="text-center mb-8 z-10 max-w-4xl w-full">
+        <h2 className="text-3xl font-black text-indigo-700 mb-2 tracking-wider">English Sentence Wizard</h2>
         {!isFinished && (
-          <p className="text-purple-500 font-bold mb-8">
-            進度：第 {currentIndex + 1} / {SENTENCE_LIST.length} 題
+          <p className="text-indigo-500 font-bold mb-8">
+            Progress: {currentIndex + 1} / {SENTENCE_LIST.length}
           </p>
         )}
 
-        {/* 答案區 */}
+        {/* 答案放置區 */}
         <motion.div 
           animate={feedback === "wrong" ? { x: [-10, 10, -10, 10, 0] } : {}}
-          className={`min-h-[120px] bg-white/60 rounded-3xl p-4 border-4 border-dashed flex flex-wrap justify-center gap-3 items-center mb-8
-            ${feedback === "correct" ? "border-green-400 bg-green-50" : feedback === "wrong" ? "border-red-400 bg-red-50" : "border-purple-300"}
+          className={`min-h-[130px] bg-white/70 rounded-3xl p-5 border-4 border-dashed flex flex-wrap justify-center gap-3 items-center mb-8
+            ${feedback === "correct" ? "border-green-400 bg-green-50" : feedback === "wrong" ? "border-red-400 bg-red-50" : "border-indigo-300"}
           `}
         >
           {Array.from({ length: targetLength }).map((_, i) => (
-            <div key={`slot-${i}`} className="min-w-[80px] h-[70px]">
+            <div key={`eng-slot-${i}`} className="min-w-[90px] h-[75px] flex items-center justify-center">
               {selected[i] ? (
                 <motion.button
                   layout
                   layoutId={selected[i].id}
                   onClick={() => handleDeselect(selected[i])}
-                  className="px-6 py-3 bg-purple-600 text-white text-3xl font-black rounded-2xl shadow-md"
+                  className="px-5 py-3 bg-indigo-600 text-white text-2xl sm:text-3xl font-bold rounded-2xl shadow-md tracking-wide"
                 >
                   {selected[i].text}
                 </motion.button>
               ) : (
-                <div className="w-full h-full bg-purple-100/50 rounded-2xl border-2 border-purple-200" />
+                <div className="w-full h-full min-w-[80px] bg-indigo-100/40 rounded-2xl border-2 border-indigo-200" />
               )}
             </div>
           ))}
         </motion.div>
 
-        {/* 選擇區 */}
-        <div className="min-h-[150px] flex flex-wrap justify-center gap-4 bg-purple-50 p-6 rounded-3xl border-4 border-purple-200 items-center">
+        {/* 字庫選擇區 */}
+        <div className="min-h-[160px] flex flex-wrap justify-center gap-4 bg-indigo-50 p-6 rounded-3xl border-4 border-indigo-200 items-center">
           <AnimatePresence mode="popLayout">
             {pool.map((block) => (
               <motion.button
@@ -196,17 +194,17 @@ export default function SentenceGame() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => handleSelect(block)}
-                className="px-6 py-4 bg-white text-purple-700 text-3xl font-black rounded-2xl border-b-8 border-purple-300 hover:bg-purple-100 active:border-b-4 active:translate-y-1 transition-all shadow-sm"
+                className="px-5 py-3.5 bg-white text-indigo-700 text-2xl sm:text-3xl font-bold rounded-2xl border-b-8 border-indigo-300 hover:bg-indigo-50 active:border-b-4 active:translate-y-1 transition-all shadow-sm tracking-wide"
               >
                 {block.text}
               </motion.button>
             ))}
           </AnimatePresence>
-          {pool.length === 0 && <span className="text-purple-300 font-bold text-xl my-auto">字塊已經揀晒喇！</span>}
+          {pool.length === 0 && <span className="text-indigo-300 font-bold text-xl my-auto">Excellent! Checking your answer...</span>}
         </div>
       </div>
 
-      {/* 遊戲完成大獎勵畫面 */}
+      {/* 大結局畫面 */}
       <AnimatePresence>
         {isFinished && (
           <motion.div
@@ -215,24 +213,24 @@ export default function SentenceGame() {
             className="absolute inset-0 z-50 bg-white/95 flex flex-col items-center justify-center p-8 text-center"
           >
             <motion.div
-              animate={{ y: [0, -20, 0], rotate: [0, 5, -5, 0] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-              className="text-[150px] mb-8"
+              animate={{ y: [0, -20, 0], scale: [1, 1.1, 1] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+              className="text-[140px] mb-6"
             >
-              🏅
+              👑
             </motion.div>
-            <h1 className="text-6xl font-black text-purple-700 mb-6">任務大成功！</h1>
-            <p className="text-4xl font-bold text-orange-500 mb-12 leading-relaxed">
+            <h1 className="text-6xl font-black text-indigo-700 mb-6">Congratulations!</h1>
+            <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-12 max-w-2xl leading-relaxed">
               {praiseText}
             </p>
             <button
               onClick={initGame}
-              className="px-12 py-6 bg-purple-600 text-white text-3xl font-black rounded-full shadow-[0_10px_0_0_#4C1D95] hover:bg-purple-700 active:translate-y-2 active:shadow-none transition-all"
+              className="px-12 py-6 bg-indigo-600 text-white text-3xl font-black rounded-full shadow-[0_10px_0_0_#1E3A8A] hover:bg-indigo-700 active:translate-y-2 active:shadow-none transition-all"
             >
-              再挑戰一次 🚀
+              Play Again 🚀
             </button>
             <div className="mt-8 flex gap-4 text-6xl">
-              <span>🎉</span><span>⭐</span><span>🎊</span><span>⭐</span><span>🎉</span>
+              <span>🎉</span><span>⭐</span><span>🎈</span><span>⭐</span><span>🎉</span>
             </div>
           </motion.div>
         )}
@@ -241,7 +239,7 @@ export default function SentenceGame() {
       <AnimatePresence>
         {feedback === "correct" && !isFinished && (
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1.5 }} exit={{ scale: 0 }} className="absolute text-9xl z-20">
-            🎉
+            👍
           </motion.div>
         )}
         {feedback === "wrong" && (

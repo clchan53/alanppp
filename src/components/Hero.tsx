@@ -28,12 +28,12 @@ export default function Hero() {
         紀錄日常點滴，分享科技與生活嘅交集。
       </motion.p>
 
-      {/* 四粒大按鈕：數學、英文、中文、句子 */}
+      {/* 五個彩色大按鈕大合體 */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="mt-10 flex flex-wrap gap-5 justify-center items-center max-w-4xl mx-auto"
+        className="mt-10 flex flex-wrap gap-5 justify-center items-center max-w-5xl mx-auto"
       >
         <Link 
           href="/game"
@@ -46,21 +46,28 @@ export default function Hero() {
           href="/english"
           className="rounded-full bg-orange-500 px-8 py-4 text-2xl font-bold text-white transition-transform hover:scale-110 inline-block shadow-xl border-4 border-orange-400 w-64 md:w-auto"
         >
-          英文挑戰 🔤
+          英文估字 🔤
         </Link>
 
         <Link 
           href="/chinese"
           className="rounded-full bg-green-600 px-8 py-4 text-2xl font-bold text-white transition-transform hover:scale-110 inline-block shadow-xl border-4 border-green-500 w-64 md:w-auto"
         >
-          中文挑戰 📝
+          中文認字 📝
         </Link>
 
         <Link 
           href="/sentence"
           className="rounded-full bg-purple-600 px-8 py-4 text-2xl font-bold text-white transition-transform hover:scale-110 inline-block shadow-xl border-4 border-purple-400 w-64 md:w-auto"
         >
-          重組句子 🧩
+          中文重組 🧩
+        </Link>
+
+        <Link 
+          href="/eng-sentence"
+          className="rounded-full bg-indigo-600 px-8 py-4 text-2xl font-bold text-white transition-transform hover:scale-110 inline-block shadow-xl border-4 border-indigo-400 w-64 md:w-auto"
+        >
+          英文重組 🇬🇧
         </Link>
       </motion.div>
     </section>
