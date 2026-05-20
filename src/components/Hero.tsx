@@ -28,25 +28,32 @@ export default function Hero() {
         紀錄日常點滴，分享科技與生活嘅交集。
       </motion.p>
 
-      {/* 兩粒大按鈕：數學 與 英文 */}
+      {/* 三粒大按鈕：數學、英文 與 中文 */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="mt-10 flex flex-col sm:flex-row gap-6"
+        className="mt-10 flex flex-col md:flex-row gap-5 justify-center items-center"
       >
         <Link 
           href="/game"
-          className="rounded-full bg-blue-500 px-10 py-4 text-2xl font-bold text-white transition-transform hover:scale-110 inline-block shadow-xl border-4 border-blue-400"
+          className="rounded-full bg-blue-500 px-8 py-4 text-2xl font-bold text-white transition-transform hover:scale-110 inline-block shadow-xl border-4 border-blue-400 w-64 md:w-auto"
         >
           數學挑戰 🍄
         </Link>
 
         <Link 
           href="/english"
-          className="rounded-full bg-orange-500 px-10 py-4 text-2xl font-bold text-white transition-transform hover:scale-110 inline-block shadow-xl border-4 border-orange-400"
+          className="rounded-full bg-orange-500 px-8 py-4 text-2xl font-bold text-white transition-transform hover:scale-110 inline-block shadow-xl border-4 border-orange-400 w-64 md:w-auto"
         >
           英文挑戰 🔤
+        </Link>
+
+        <Link 
+          href="/chinese"
+          className="rounded-full bg-green-600 px-8 py-4 text-2xl font-bold text-white transition-transform hover:scale-110 inline-block shadow-xl border-4 border-green-500 w-64 md:w-auto"
+        >
+          中文挑戰 📝
         </Link>
       </motion.div>
     </section>
