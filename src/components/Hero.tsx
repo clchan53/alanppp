@@ -13,9 +13,9 @@ export default function Hero() {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="text-5xl font-semibold tracking-tight sm:text-7xl md:text-8xl"
       >
-        生活細節。
+        陳言臻的遊戲。
         <br />
-        <span className="text-gray-400">重新定義。</span>
+        <span className="text-gray-400">陳爾樂的遊戲。</span>
       </motion.h1>
 
       {/* 副標題動畫 */}
@@ -25,7 +25,7 @@ export default function Hero() {
         transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
         className="mt-6 max-w-2xl text-lg font-medium tracking-wide text-gray-300 sm:text-xl"
       >
-        紀錄日常點滴，分享科技與生活嘅交集。
+        Archie and Ayla
       </motion.p>
 
       {/* 六個彩色大按鈕大合體 */}

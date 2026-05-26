@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// 11 句中文句子庫
 const SENTENCE_LIST = [
   { text: "小種子發芽了。", chunks: ["小種子", "發芽了", "。"] },
   { text: "我在温室種植番茄。", chunks: ["我", "在", "温室", "種植", "番茄", "。"] },
@@ -68,12 +67,9 @@ export default function SentenceGame() {
     initGame();
   }, []);
 
-  // 載入新題目 (核心修復點：將 currentIndex 加入 ID 防止衝突)
   useEffect(() => {
     if (shuffledDeck.length > 0 && !isFinished) {
       const currentSentence = shuffledDeck[currentIndex];
-      
-      // 👇 透過 q${currentIndex} 確保每條題目嘅字塊 ID 絕對獨立
       const initialPool = currentSentence.chunks
         .map((text, i) => ({ id: `q${currentIndex}-zh-word-${i}`, text }))
         .sort(() => Math.random() - 0.5);
@@ -84,13 +80,18 @@ export default function SentenceGame() {
     }
   }, [currentIndex, shuffledDeck, isFinished]);
 
-  useEffect(() => {
-    if (shuffledDeck.length === 0 || isFinished) return;
+  // 👇 核心修復：中文版同樣改用主動觸發對答案
+  const handleSelect = (block: WordBlock) => {
+    if (feedback !== "idle") return;
     
+    const newSelected = [...selected, block];
+    setPool((prev) => prev.filter((b) => b.id !== block.id));
+    setSelected(newSelected);
+
     const currentSentence = shuffledDeck[currentIndex];
-    
-    if (selected.length === currentSentence.chunks.length) {
-      const formedSentence = selected.map((w) => w.text).join("");
+
+    if (newSelected.length === currentSentence.chunks.length) {
+      const formedSentence = newSelected.map((w) => w.text).join("");
       
       if (formedSentence === currentSentence.text) {
         playSound("coin");
@@ -116,17 +117,11 @@ export default function SentenceGame() {
         
         setTimeout(() => {
           setFeedback("idle");
-          setPool((prev) => [...prev, ...selected].sort(() => Math.random() - 0.5));
+          setPool((prev) => [...prev, ...newSelected].sort(() => Math.random() - 0.5));
           setSelected([]);
         }, 800);
       }
     }
-  }, [selected, currentIndex, shuffledDeck, isFinished]);
-
-  const handleSelect = (block: WordBlock) => {
-    if (feedback !== "idle") return;
-    setPool((prev) => prev.filter((b) => b.id !== block.id));
-    setSelected((prev) => [...prev, block]);
   };
 
   const handleDeselect = (block: WordBlock) => {
@@ -141,7 +136,6 @@ export default function SentenceGame() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[85vh] bg-[#F3E8FF] rounded-3xl p-6 shadow-inner relative overflow-hidden select-none">
       
-      {/* 計分錶 */}
       <div className="absolute top-6 right-6 flex items-center gap-3 bg-white/90 p-3 px-5 rounded-full border-4 border-purple-400 z-10 shadow-md">
         <span className="text-4xl">🌟</span>
         <span className="text-4xl font-extrabold text-purple-700 font-mono tracking-tighter">
@@ -157,7 +151,6 @@ export default function SentenceGame() {
           </p>
         )}
 
-        {/* 答案區 */}
         <motion.div 
           animate={feedback === "wrong" ? { x: [-10, 10, -10, 10, 0] } : {}}
           className={`min-h-[120px] bg-white/60 rounded-3xl p-4 border-4 border-dashed flex flex-wrap justify-center gap-3 items-center mb-8
@@ -182,7 +175,6 @@ export default function SentenceGame() {
           ))}
         </motion.div>
 
-        {/* 選擇區 */}
         <div className="min-h-[150px] flex flex-wrap justify-center gap-4 bg-purple-50 p-6 rounded-3xl border-4 border-purple-200 items-center">
           <AnimatePresence mode="popLayout">
             {pool.map((block) => (
@@ -206,7 +198,6 @@ export default function SentenceGame() {
         </div>
       </div>
 
-      {/* 遊戲完成大獎勵畫面 */}
       <AnimatePresence>
         {isFinished && (
           <motion.div
@@ -214,40 +205,21 @@ export default function SentenceGame() {
             animate={{ opacity: 1, scale: 1 }}
             className="absolute inset-0 z-50 bg-white/95 flex flex-col items-center justify-center p-8 text-center"
           >
-            <motion.div
-              animate={{ y: [0, -20, 0], rotate: [0, 5, -5, 0] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-              className="text-[150px] mb-8"
-            >
-              🏅
-            </motion.div>
+            <motion.div animate={{ y: [0, -20, 0], rotate: [0, 5, -5, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="text-[150px] mb-8">🏅</motion.div>
             <h1 className="text-6xl font-black text-purple-700 mb-6">任務大成功！</h1>
-            <p className="text-4xl font-bold text-orange-500 mb-12 leading-relaxed">
-              {praiseText}
-            </p>
-            <button
-              onClick={initGame}
-              className="px-12 py-6 bg-purple-600 text-white text-3xl font-black rounded-full shadow-[0_10px_0_0_#4C1D95] hover:bg-purple-700 active:translate-y-2 active:shadow-none transition-all"
-            >
-              再挑戰一次 🚀
-            </button>
-            <div className="mt-8 flex gap-4 text-6xl">
-              <span>🎉</span><span>⭐</span><span>🎊</span><span>⭐</span><span>🎉</span>
-            </div>
+            <p className="text-4xl font-bold text-orange-500 mb-12 leading-relaxed">{praiseText}</p>
+            <button onClick={initGame} className="px-12 py-6 bg-purple-600 text-white text-3xl font-black rounded-full shadow-[0_10px_0_0_#4C1D95] hover:bg-purple-700 active:translate-y-2 active:shadow-none transition-all">再挑戰一次 🚀</button>
+            <div className="mt-8 flex gap-4 text-6xl"><span>🎉</span><span>⭐</span><span>🎊</span><span>⭐</span><span>🎉</span></div>
           </motion.div>
         )}
       </AnimatePresence>
 
       <AnimatePresence>
         {feedback === "correct" && !isFinished && (
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1.5 }} exit={{ scale: 0 }} className="absolute text-9xl z-20">
-            🎉
-          </motion.div>
+          <motion.div initial={{ scale: 0 }} animate={{ scale: 1.5 }} exit={{ scale: 0 }} className="absolute text-9xl z-20">🎉</motion.div>
         )}
         {feedback === "wrong" && (
-          <motion.div initial={{ x: -20 }} animate={{ x: [0, -20, 20, -20, 20, 0] }} className="absolute text-9xl z-20">
-            ❌
-          </motion.div>
+          <motion.div initial={{ x: -20 }} animate={{ x: [0, -20, 20, -20, 20, 0] }} className="absolute text-9xl z-20">❌</motion.div>
         )}
       </AnimatePresence>
     </div>
