@@ -76,6 +76,13 @@ export default function Hero() {
         >
           對話點讀 🗣️
         </Link>
+
+        <Link 
+          href="/money"
+          className="rounded-full bg-yellow-500 px-8 py-4 text-xl sm:text-2xl font-bold text-white transition-transform hover:scale-110 inline-block shadow-xl border-4 border-yellow-400 w-full sm:w-auto"
+        >
+          香港錢幣 💰
+        </Link>
       </motion.div>
     </section>
   );
