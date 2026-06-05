@@ -239,20 +239,25 @@ const DICTIONARY: Record<string, string> = {
   "view": "景色 / 觀點", "Washington": "華盛頓"
 };
 
-// 關卡標題
+// 💡 請貼在 DICTIONARY = { ... }; 的正下方
+
 const LEVEL_TITLES = [
   "1st 100 Words", "2nd 100 Words", "3rd 100 Words", "4th 100 Words", "5th 100 Words",
   "6th 100 Words", "7th 100 Words", "8th 100 Words", "9th 100 Words", "10th 100 Words"
 ];
 
+const PRAISES = [
+  "你好叻呀！已經學識晒呢 100 個字！🎉",
+  "太完美喇！你係英文拼字大師！🏆",
+  "爸爸為你感到驕傲！好聰明！⭐",
+  "挑戰成功！準備好去下一關未？🚀"
+];
+
 export default function SightWordsGame() {
-  const [selectedGroup, setSelectedGroup] = useState<number | null>(null); // null 代表喺目錄畫面
-  
-  // 新增防重覆及通關狀態
+  const [selectedGroup, setSelectedGroup] = useState<number | null>(null);
   const [remainingWords, setRemainingWords] = useState<string[]>([]);
   const [isFinished, setIsFinished] = useState(false);
   const [praiseText, setPraiseText] = useState("");
-
   const [targetWord, setTargetWord] = useState<string>("");
   const [options, setOptions] = useState<string[]>([]);
   const [score, setScore] = useState(0);
@@ -272,7 +277,6 @@ export default function SightWordsGame() {
     }
   };
 
-  // 抽題邏輯：從 Pool 中抽取，清空即通關
   const generateQuestion = (groupId: number, currentPool: string[]) => {
     if (currentPool.length === 0) {
       const praise = PRAISES[Math.floor(Math.random() * PRAISES.length)];
@@ -283,9 +287,8 @@ export default function SightWordsGame() {
 
     const target = currentPool[0];
     const nextPool = currentPool.slice(1);
-    setRemainingWords(nextPool); // 更新剩餘字庫
+    setRemainingWords(nextPool);
     
-    // 從完整群組中抽 2 個非目標字作為干擾項
     const groupWords = RAW_GROUPS[groupId];
     const wrongOptions = groupWords
       .filter((w) => w !== target)
@@ -327,7 +330,6 @@ export default function SightWordsGame() {
     }
   };
 
-  // --- 視圖 A：關卡選擇目錄 ---
   if (selectedGroup === null) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[85vh] bg-[#F0F9FF] rounded-3xl p-6 shadow-inner relative select-none">
@@ -357,11 +359,9 @@ export default function SightWordsGame() {
   const totalWords = RAW_GROUPS[selectedGroup].length;
   const currentIndex = totalWords - remainingWords.length;
 
-  // --- 視圖 B：遊戲進行畫面 ---
   return (
     <div className="flex flex-col items-center justify-center min-h-[85vh] bg-[#F0F9FF] rounded-3xl p-6 shadow-inner relative overflow-hidden select-none">
       
-      {/* 導航列與計分 */}
       <div className="absolute top-6 left-6 z-10">
         <button onClick={() => setSelectedGroup(null)} className="px-6 py-3 bg-white text-sky-600 font-bold rounded-full shadow-sm border-2 border-sky-200 hover:bg-sky-50 transition-colors">🔙 返回目錄</button>
       </div>
@@ -373,7 +373,6 @@ export default function SightWordsGame() {
       <div className="text-center mb-8 z-10 w-full max-w-3xl mt-16 sm:mt-0">
         <h2 className="text-3xl font-black text-sky-700 mb-2 tracking-wide">{LEVEL_TITLES[selectedGroup - 1]}</h2>
         
-        {/* 進度條 */}
         {!isFinished && (
           <div className="w-full max-w-sm mx-auto bg-sky-100 rounded-full h-3 mb-6 relative overflow-hidden border border-sky-200">
             <div className="bg-sky-500 h-full transition-all duration-300" style={{ width: `${(currentIndex / totalWords) * 100}%` }} />
@@ -381,7 +380,6 @@ export default function SightWordsGame() {
           </div>
         )}
 
-        {/* 發音按鈕 */}
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -401,7 +399,6 @@ export default function SightWordsGame() {
         </motion.div>
       </div>
 
-      {/* 選項區域 */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-4xl z-10 px-4">
         {options.map((word, index) => (
           <motion.button
@@ -417,7 +414,6 @@ export default function SightWordsGame() {
         ))}
       </div>
 
-      {/* 100 題完成大獎勵畫面 */}
       <AnimatePresence>
         {isFinished && (
           <motion.div initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} className="absolute inset-0 z-50 bg-white/95 flex flex-col items-center justify-center p-6 text-center">
