@@ -113,6 +113,13 @@ export default function Hero() {
           英文朗讀 📖
         </Link>
 
+        <Link 
+          href="/chinese-vocab"
+          className="rounded-full bg-fuchsia-500 px-8 py-4 text-xl sm:text-2xl font-bold text-white transition-transform hover:scale-110 inline-block shadow-xl border-4 border-fuchsia-400 w-full sm:w-auto"
+        >
+          中文詞彙 📖
+        </Link>
+
       </motion.div>
     </section>
   );
