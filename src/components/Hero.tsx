@@ -133,6 +133,14 @@ export default function Hero() {
         >
           自我介紹 🎤
         </Link>
+
+        <Link 
+          href="/clock"
+          className="rounded-full bg-violet-500 px-8 py-4 text-xl sm:text-2xl font-bold text-white transition-transform hover:scale-110 inline-block shadow-xl border-4 border-violet-400 w-full sm:w-auto"
+        >
+          學習時鐘 ⏰
+        </Link>
+
       </motion.div>
     </section>
   );
