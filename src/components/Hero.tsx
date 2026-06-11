@@ -127,6 +127,12 @@ export default function Hero() {
           科學常識 🔭
         </Link>
 
+        <Link 
+          href="/self-intro"
+          className="rounded-full bg-rose-500 px-8 py-4 text-xl sm:text-2xl font-bold text-white transition-transform hover:scale-110 inline-block shadow-xl border-4 border-rose-400 w-full sm:w-auto"
+        >
+          自我介紹 🎤
+        </Link>
       </motion.div>
     </section>
   );
