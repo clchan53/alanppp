@@ -141,6 +141,13 @@ export default function Hero() {
           學習時鐘 ⏰
         </Link>
 
+{/* 放喺你原有按鈕嘅最尾 */}
+        <Link 
+          href="/mandarin"
+          className="rounded-full bg-orange-500 px-8 py-4 text-xl sm:text-2xl font-bold text-white transition-transform hover:scale-110 inline-block shadow-xl border-4 border-orange-400 w-full sm:w-auto"
+        >
+          小一普通話 🎒
+        </Link>
       </motion.div>
     </section>
   );
