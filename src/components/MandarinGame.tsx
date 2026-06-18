@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// 🎒 10個關卡普通話大數據庫 (每關 10 題，針對小一中文科及常規)
+// 🎒 15個關卡普通話大數據庫 (每關 10 題，包含學校與日常生活)
 const MANDARIN_GROUPS: Record<number, Array<{ word: string; pinyin: string; jyutping: string; context: string; emoji: string }>> = {
   1: [
     { word: "上課", pinyin: "shàng kè", jyutping: "上堂", context: "課堂開始時", emoji: "🎒" },
@@ -124,10 +124,70 @@ const MANDARIN_GROUPS: Record<number, Array<{ word: string; pinyin: string; jyut
     { word: "男孩", pinyin: "nán hái", jyutping: "男仔", context: "男孩子", emoji: "👦" },
     { word: "女孩", pinyin: "nǚ hái", jyutping: "女仔", context: "女孩子", emoji: "👧" },
     { word: "自己", pinyin: "zì jǐ", jyutping: "自己", context: "我自己", emoji: "🙋" }
+  ],
+  // 👇 新增的日常生活 5 關 👇
+  11: [
+    { word: "蘋果", pinyin: "píng guǒ", jyutping: "蘋果", context: "食飯後食水果", emoji: "🍎" },
+    { word: "麵包", pinyin: "miàn bāo", jyutping: "麵包", context: "早餐食麵包", emoji: "🍞" },
+    { word: "牛奶", pinyin: "niú nǎi", jyutping: "牛奶", context: "飲杯熱牛奶", emoji: "🥛" },
+    { word: "雞蛋", pinyin: "jī dàn", jyutping: "雞蛋", context: "煮隻雞蛋食", emoji: "🥚" },
+    { word: "米飯", pinyin: "mǐ fàn", jyutping: "白飯", context: "午餐食白飯", emoji: "🍚" },
+    { word: "筷子", pinyin: "kuài zi", jyutping: "筷子", context: "用筷子夾餸", emoji: "🥢" },
+    { word: "湯匙", pinyin: "tāng chí", jyutping: "湯羹", context: "用湯羹飲湯", emoji: "🥄" },
+    { word: "碗", pinyin: "wǎn", jyutping: "碗", context: "裝飯用嘅碗", emoji: "🥣" },
+    { word: "水杯", pinyin: "shuǐ bēi", jyutping: "水杯", context: "用水杯飲水", emoji: "🥤" },
+    { word: "蔬菜", pinyin: "shū cài", jyutping: "蔬菜", context: "食多啲菜健康啲", emoji: "🥦" }
+  ],
+  12: [
+    { word: "衣服", pinyin: "yī fu", jyutping: "衫", context: "著衫出街", emoji: "👕" },
+    { word: "褲子", pinyin: "kù zi", jyutping: "褲", context: "著條長褲", emoji: "👖" },
+    { word: "鞋子", pinyin: "xié zi", jyutping: "鞋", context: "著鞋出門", emoji: "👟" },
+    { word: "襪子", pinyin: "wà zi", jyutping: "襪", context: "著鞋前要著襪", emoji: "🧦" },
+    { word: "外套", pinyin: "wài tào", jyutping: "外套", context: "天冷著外套", emoji: "🧥" },
+    { word: "帽子", pinyin: "mào zi", jyutping: "帽", context: "太陽曬戴帽", emoji: "🧢" },
+    { word: "雨傘", pinyin: "yǔ sǎn", jyutping: "遮", context: "落雨要擔遮", emoji: "☂️" },
+    { word: "裙子", pinyin: "qún zi", jyutping: "裙", context: "靚靚嘅裙", emoji: "👗" },
+    { word: "手套", pinyin: "shǒu tào", jyutping: "手套", context: "天冷戴手套", emoji: "🧤" },
+    { word: "睡衣", pinyin: "shuì yī", jyutping: "睡衣", context: "瞓覺著睡衣", emoji: "🥼" }
+  ],
+  13: [
+    { word: "巴士", pinyin: "bā shì", jyutping: "巴士", context: "搭巴士返學", emoji: "🚌" },
+    { word: "汽車", pinyin: "qì chē", jyutping: "私家車", context: "爸爸揸車", emoji: "🚗" },
+    { word: "的士", pinyin: "dí shì", jyutping: "的士", context: "截的士返屋企", emoji: "🚕" },
+    { word: "地鐵", pinyin: "dì tiě", jyutping: "地鐵", context: "搭地鐵過海", emoji: "🚇" },
+    { word: "火車", pinyin: "huǒ chē", jyutping: "火車", context: "搭火車去旅行", emoji: "🚂" },
+    { word: "飛機", pinyin: "fēi jī", jyutping: "飛機", context: "搭飛機去玩", emoji: "✈️" },
+    { word: "船", pinyin: "chuán", jyutping: "船", context: "搭船去離島", emoji: "⛴️" },
+    { word: "單車", pinyin: "dān chē", jyutping: "單車", context: "去公園踩單車", emoji: "🚲" },
+    { word: "馬路", pinyin: "mǎ lù", jyutping: "馬路", context: "過馬路要小心", emoji: "🛣️" },
+    { word: "紅綠燈", pinyin: "hóng lǜ dēng", jyutping: "紅綠燈", context: "睇紅綠燈過馬路", emoji: "🚥" }
+  ],
+  14: [
+    { word: "房間", pinyin: "fáng jiān", jyutping: "房", context: "我自己嘅房", emoji: "🏠" },
+    { word: "床", pinyin: "chuáng", jyutping: "床", context: "瞓覺嘅床", emoji: "🛏️" },
+    { word: "被子", pinyin: "bèi zi", jyutping: "被", context: "凍要蓋被", emoji: "🛌" },
+    { word: "枕頭", pinyin: "zhěn tou", jyutping: "枕頭", context: "枕住個頭睡覺", emoji: "😴" },
+    { word: "電視", pinyin: "diàn shì", jyutping: "電視", context: "睇電視節目", emoji: "📺" },
+    { word: "沙發", pinyin: "shā fā", jyutping: "梳化", context: "坐喺梳化休息", emoji: "🛋️" },
+    { word: "冰箱", pinyin: "bīng xiāng", jyutping: "雪櫃", context: "雪糕放雪櫃", emoji: "🧊" },
+    { word: "洗手間", pinyin: "xǐ shǒu jiān", jyutping: "洗手間", context: "去廁所洗手", emoji: "🚽" },
+    { word: "門", pinyin: "mén", jyutping: "門", context: "出去要開門", emoji: "🚪" },
+    { word: "窗戶", pinyin: "chuāng hu", jyutping: "窗", context: "打開窗吹風", emoji: "🪟" }
+  ],
+  15: [
+    { word: "眼睛", pinyin: "yǎn jing", jyutping: "眼睛", context: "睇嘢嘅眼", emoji: "👀" },
+    { word: "耳朵", pinyin: "ěr duo", jyutping: "耳仔", context: "聽聲音嘅耳仔", emoji: "👂" },
+    { word: "鼻子", pinyin: "bí zi", jyutping: "鼻", context: "索吓氣味嘅鼻", emoji: "👃" },
+    { word: "嘴巴", pinyin: "zuǐ ba", jyutping: "嘴", context: "講嘢同食嘢嘅嘴", emoji: "👄" },
+    { word: "手", pinyin: "shǒu", jyutping: "手", context: "攞嘢嘅手", emoji: "✋" },
+    { word: "腳", pinyin: "jiǎo", jyutping: "腳", context: "行路嘅腳", emoji: "🦶" },
+    { word: "跑", pinyin: "pǎo", jyutping: "跑", context: "跑得好快", emoji: "🏃" },
+    { word: "跳", pinyin: "tiào", jyutping: "跳", context: "跳得好高", emoji: "🤸" },
+    { word: "笑", pinyin: "xiào", jyutping: "笑", context: "開心大笑", emoji: "😁" },
+    { word: "哭", pinyin: "kū", jyutping: "喊", context: "傷心喊出嚟", emoji: "😭" }
   ]
 };
 
-// 把所有生字打平成一個陣列，用嚟產生干擾選項
 const ALL_ITEMS = Object.values(MANDARIN_GROUPS).flat();
 
 const LEVEL_TITLES = [
@@ -140,7 +200,12 @@ const LEVEL_TITLES = [
   "第七關：基礎概念 🀄",
   "第八關：標點符號 ✒️",
   "第九關：自然詞彙 🌳",
-  "第十關：人物動物 🐶"
+  "第十關：人物動物 🐶",
+  "第十一關：食物餐具 🍎",
+  "第十二關：衣服穿著 👕",
+  "第十三關：交通工具 🚌",
+  "第十四關：家居房間 🏠",
+  "第十五關：身體動作 👀"
 ];
 
 const PRAISES = [
@@ -168,7 +233,6 @@ export default function MandarinGame() {
     try { const audio = new Audio(`/${type}.mp3`); audio.play().catch(()=>{}); } catch (e) {}
   };
 
-  // 🗣️ 標準普通話發聲系統 (zh-CN)
   const speakMandarin = (text: string) => {
     if ("speechSynthesis" in window) {
       window.speechSynthesis.cancel();
@@ -179,7 +243,6 @@ export default function MandarinGame() {
     }
   };
 
-  // 抽題邏輯
   const generateQuestion = (currentPool: CommandItem[], currentIndex: number) => {
     if (currentIndex >= 10) {
       playSound("success");
@@ -189,8 +252,6 @@ export default function MandarinGame() {
     }
 
     const currentTarget = currentPool[currentIndex];
-    
-    // 隨機抽取 3 個非目標生字作為干擾項
     const wrongOptions = ALL_ITEMS
       .filter((w) => w.word !== currentTarget.word)
       .sort(() => Math.random() - 0.5)
@@ -207,7 +268,7 @@ export default function MandarinGame() {
 
   const handleStartLevel = (groupId: number) => {
     const groupWords = MANDARIN_GROUPS[groupId];
-    const shuffled = [...groupWords].sort(() => Math.random() - 0.5); // 洗牌
+    const shuffled = [...groupWords].sort(() => Math.random() - 0.5); 
     
     setSelectedGroup(groupId);
     setQuizPool(shuffled);
@@ -239,19 +300,19 @@ export default function MandarinGame() {
     }
   };
 
-  // --- 視圖 A：關卡選擇目錄 ---
   if (selectedGroup === null) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[85vh] bg-[#FFF7ED] rounded-3xl p-6 shadow-inner relative select-none">
         <h2 className="text-4xl font-black text-orange-700 mb-8 tracking-wide">小一普通話大冒險 🗺️</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full max-w-5xl">
+        {/* 排版已優化為 lg:grid-cols-5，方便顯示 15 個關卡 */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 w-full max-w-6xl">
           {LEVEL_TITLES.map((title, index) => (
             <motion.button
               key={index}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => handleStartLevel(index + 1)}
-              className="py-6 px-4 bg-white text-orange-700 border-b-8 border-orange-300 shadow-md font-black text-xl rounded-3xl hover:bg-orange-50 transition-all flex flex-col items-center justify-center gap-2"
+              className="py-6 px-3 bg-white text-orange-700 border-b-8 border-orange-300 shadow-md font-black text-lg sm:text-xl rounded-3xl hover:bg-orange-50 transition-all flex flex-col items-center justify-center gap-2"
             >
               <span className="text-center">{title}</span>
               <span className="text-sm font-bold bg-orange-100 text-orange-600 px-3 py-1 rounded-full">10 題挑戰</span>
@@ -262,11 +323,9 @@ export default function MandarinGame() {
     );
   }
 
-  // --- 視圖 B：遊戲進行畫面 ---
   return (
     <div className="flex flex-col items-center justify-start min-h-[85vh] bg-[#FFF7ED] rounded-3xl p-4 sm:p-8 shadow-inner select-none overflow-hidden relative font-sans">
       
-      {/* 導航列與計分 */}
       <div className="absolute top-6 left-6 z-10">
         <button 
           onClick={() => { window.speechSynthesis.cancel(); setSelectedGroup(null); }} 
@@ -281,7 +340,7 @@ export default function MandarinGame() {
       </div>
 
       {target && (
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl flex flex-col items-center mt-12 sm:mt-0">
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl flex flex-col items-center mt-16 sm:mt-0">
           
           <h2 className="text-3xl font-black text-orange-700 mb-2 tracking-wide mt-4">{LEVEL_TITLES[selectedGroup - 1]}</h2>
 
@@ -308,7 +367,6 @@ export default function MandarinGame() {
             </div>
           </div>
 
-          {/* 4選1 選項區域 */}
           <div className="grid grid-cols-2 gap-4 sm:gap-6 w-full max-w-2xl px-2">
             {options.map((item, index) => (
               <motion.button
@@ -326,7 +384,6 @@ export default function MandarinGame() {
             ))}
           </div>
 
-          {/* 結算畫面 */}
           <AnimatePresence>
             {isFinished && (
               <motion.div initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} className="absolute inset-0 z-50 bg-white/95 flex flex-col items-center justify-center p-6 text-center">
@@ -341,7 +398,6 @@ export default function MandarinGame() {
             )}
           </AnimatePresence>
 
-          {/* 對錯動畫 */}
           <AnimatePresence>
             {feedback === "correct" && !isFinished && <motion.div initial={{ scale: 0 }} animate={{ scale: 1.5 }} exit={{ scale: 0 }} className="absolute inset-0 m-auto w-32 h-32 text-[100px] z-20 flex items-center justify-center pointer-events-none">✅</motion.div>}
             {feedback === "wrong" && <motion.div initial={{ x: -20 }} animate={{ x: [0, -20, 20, -20, 20, 0] }} className="absolute inset-0 m-auto w-32 h-32 text-[100px] z-20 flex items-center justify-center pointer-events-none">❌</motion.div>}
