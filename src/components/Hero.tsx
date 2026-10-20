@@ -163,6 +163,20 @@ export default function Hero() {
         >
           小一課文 🧮
         </Link>
+
+        <Link 
+          href="/family-album"
+          className="rounded-full bg-amber-500 px-8 py-4 text-xl sm:text-2xl font-bold text-white transition-transform hover:scale-110 inline-block shadow-xl border-4 border-amber-400 w-full sm:w-auto"
+        >
+          FAMILY Album 🧮
+        </Link>
+
+        <Link 
+          href="/FamilyRevisionGame"
+          className="rounded-full bg-amber-500 px-8 py-4 text-xl sm:text-2xl font-bold text-white transition-transform hover:scale-110 inline-block shadow-xl border-4 border-amber-400 w-full sm:w-auto"
+        >
+          FAMILY TREE 🧮
+        </Link>
       </motion.div>
     </section>
   );
