@@ -163,7 +163,7 @@ const FamilyTreeVisual = () => {
 };
 
 const FamilyRevisionGame = () => {
-  const [activeBlank, setActiveBlank] = useState(1);
+  const [activeBlank, setActiveBlank] = useState<number | null>(1);
   const [userAnswers, setUserAnswers] = useState<Record<number, string>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
